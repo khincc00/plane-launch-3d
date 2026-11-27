@@ -118,6 +118,32 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .miss{color:#fca5a5;font-weight:700;margin-top:6px;font-size:14px}
 .tip{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.5}
 
+#live{left:50%;top:50%;transform:translate(-50%,-50%);width:min(660px,calc(100% - 24px));max-height:calc(100% - 24px);overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px;z-index:20;box-shadow:0 20px 60px rgba(0,0,0,.55)}
+#live h3{margin:0;font-family:'Sora';font-size:18px}
+#live p{margin:6px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5}
+#live label{display:block;font-size:10.5px;letter-spacing:.14em;color:var(--muted);margin-top:12px}
+#live input,#live select{width:100%;min-width:0;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:8px 9px;font:inherit;font-size:13px}
+#live select option{background:#0b1426}
+.lline{display:flex;gap:8px;margin-top:5px}
+.lline input{flex:1}
+.lgrp{border-radius:16px;padding:12px;margin-top:14px}
+.lgrp h4{margin:0 0 4px;font-family:'Sora';font-size:14px}
+.lgrp.up{border:1px solid rgba(74,222,128,.45);background:rgba(74,222,128,.06)}
+.lgrp.dn{border:1px solid rgba(251,113,133,.45);background:rgba(251,113,133,.06)}
+.lrow{display:grid;grid-template-columns:1.5fr .8fr .8fr .8fr .7fr 52px;gap:6px;align-items:center;margin-top:6px}
+.lrow.lh{font-size:9.5px;letter-spacing:.1em;color:var(--muted)}
+.lrow .btn{padding:8px 0}
+.lst{display:inline-block;margin-top:8px;font-size:12px;border-radius:999px;padding:4px 10px;border:1px solid var(--line)}
+.lst.on{border-color:var(--green);color:var(--green)} .lst.bad{border-color:var(--red);color:var(--red)}
+.lacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.lacts .btn{padding:10px 14px}
+#giftFeed{position:fixed;left:16px;bottom:112px;display:flex;flex-direction:column-reverse;gap:6px;z-index:12;pointer-events:none;max-width:min(380px,calc(100% - 32px))}
+.gf{background:rgba(6,11,24,.84);border:1px solid var(--line);border-radius:14px;padding:7px 11px;font-size:13px;line-height:1.35;transition:opacity .6s;animation:gfin .3s}
+.gf b{color:#fff} .gf.up{border-color:rgba(74,222,128,.7)} .gf.dn{border-color:rgba(251,113,133,.7)}
+.gf small{display:block;color:var(--muted);font-size:11.5px}
+@keyframes gfin{from{opacity:0;transform:translateX(-24px)}}
+@media (max-width:560px){ .lrow{grid-template-columns:1fr 1fr 1fr 1fr 46px} .lrow .nm{grid-column:1/-1} .lrow.lh .nm,.lrow.lh .dd{display:none} .lrow .dd{display:none} }
+
 #loading{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);z-index:50;font-family:'Sora';font-size:15px;color:var(--muted)}
 
 @media (max-width:760px){
@@ -145,7 +171,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
     <div class="stat coin"><span>KOIN</span><b id="hCoins">0</b></div>
   </div>
   <div class="prog"><span id="hLevel">LEVEL 1</span><i><u id="uProg"></u></i></div>
-  <div class="hud-sub"><span class="chip" id="hWind"></span><span class="chip" id="hBiome"></span><span class="chip" id="hStall" style="display:none;background:#b91c1c;border-color:#fb7185">⚠ STALL</span></div>
+  <div class="hud-sub"><span class="chip" id="hWind"></span><span class="chip" id="hBiome"></span><span class="chip" id="hStall" style="display:none;background:#b91c1c;border-color:#fb7185">⚠ STALL</span><span class="chip" id="hGift" style="display:none"></span><span class="chip" id="hLive" style="display:none;border-color:var(--green);color:var(--green)">● LIVE</span></div>
   <div class="bars">
     <div class="bar" id="barEng">MESIN<i><u id="uEng" style="background:var(--sky)"></u></i></div>
     <div class="bar" id="barRkt">ROKET<i><u id="uRkt" style="background:#f97316"></u></i></div>
@@ -156,8 +182,10 @@ button:disabled{opacity:.45;cursor:not-allowed}
   <button class="round" id="bFast" style="display:none">⏩ 1×</button>
   <button class="round" id="bSkip" style="display:none">⏭ Selesai</button>
   <button class="round" id="btnMute">🔊</button>
+  <button class="round" id="btnLive">📡 Live</button>
   <button class="round" id="btnGarage">🔧 Garasi</button>
 </div>
+<div id="giftFeed"></div>
 
 <div id="aimInfo"><div class="stat"><span>TARIKAN</span><b id="aPow">0%</b></div><div class="stat"><span>SUDUT</span><b id="aAng">0°</b></div><div class="stat"><span>LAJU LEPAS</span><b id="aSpd">0</b></div></div>
 <div id="hint"></div>
@@ -171,6 +199,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 <div id="garage" class="overlay"></div>
 <button class="go" id="btnGo">▶ KE KETAPEL</button>
 <div id="result" class="overlay"></div>
+<div id="live" class="overlay"></div>
 
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
@@ -493,7 +522,8 @@ function stepPhys(p,s,dt,u,lr,rocketOn,t){
   const q=0.5*rho*V*V;
   if(p.crashed) u=-0.3;
   const nT=(Math.cos(gam)-0.4*Math.sin(gam))/Math.max(0.5,cphi)+1.6*u;
-  const aN=(nT*p.m*G/(q*s.S+1e-6)-s.CL0)/s.CLA;
+  const lm=p.lm||1, lmA=1+(lm-1)*0.6;   // pengali daya angkat dari gift live (autopilot hanya mengimbangi sebagian)
+  const aN=(nT*p.m*G/(q*s.S*lmA+1e-6)-s.CL0)/s.CLA;
   const aBest=s.aBest+Math.max(0,u)*0.3+Math.min(0,u)*0.1;
   let aCmd=clamp(Math.min(aN,aBest),-0.14,s.aStall*0.92+Math.max(0,u)*0.25);
   if(s.stab<1) aCmd+=(1-s.stab)*0.12*Math.sin(t*2.3+1.1)*Math.sin(t*0.7);   // tanpa ekor: mengangguk-angguk
@@ -503,7 +533,7 @@ function stepPhys(p,s,dt,u,lr,rocketOn,t){
   const a=wrap(p.theta-gam); p.alpha=a;
   const cl=liftCoef(a,s)*(p.crashed?0.4:1), f=smooth(s.aStall,s.aStall+0.18,Math.abs(a));
   const cd=s.cd0*(p.crashed?3:1)+(cl*cl/(Math.PI*s.e*s.AR))*(1-f)+1.28*Math.sin(a)**2*f;
-  const L=q*s.S*cl, D=q*s.S*cd;
+  const L=q*s.S*cl*lm, D=q*s.S*cd;
   let upx=-uy*ux, upy=1-uy*uy, upz=-uy*uz; const ul=Math.hypot(upx,upy,upz)||1; upx/=ul; upy/=ul; upz/=ul;
   const sx=uy*upz-uz*upy, sy=uz*upx-ux*upz, sz=ux*upy-uy*upx;
   const lx=upx*cphi+sx*sphi, ly=upy*cphi+sy*sphi, lz=upz*cphi+sz*sphi;
@@ -855,6 +885,7 @@ function launch(){
   $('bFast').style.display='inline-block'; $('bSkip').style.display='none';
   hint('◀ ▶ / A D: belok hindari rintangan • ▲ ▼ / W S: hidung'+(save.rocket>0?' • tahan 🚀 / SPASI: roket':''), 5000);
   tone(160,50,0.35,'triangle',0.35); burst(0.5,1400,0.25*aim.frac+0.05);
+  liveFx=[]; P.lm=1; for(const fx of liveQueue.splice(0)) startFx(fx,true);
 }
 function crashInto(o){
   P.crashed=true; flight.crashes++;
@@ -868,7 +899,7 @@ function crashInto(o){
 }
 function endFlight(){
   if(state!=='flight') return;
-  state='landed'; resultTimer=0.9;
+  state='landed'; resultTimer=0.9; liveFx=[]; P.lm=1;
   const lvIdx=save.level-1, L=curLevel(), dist=Math.max(0,P.x), mult=coinMult();
   const dCoins=Math.floor(dist*mult), earned=dCoins+flight.ringCoins;
   const won=flight.won||dist>=L.target, record=dist>save.best[lvIdx];
@@ -964,6 +995,9 @@ function renderGarage(){
         <p>Pengali koin per meter +0,3 tiap level. <b>Tanpa batas</b> & <b>tidak reset</b>. Tiap map selesai, total bonus dikali 2.</p>
         <div class="lvt mono">LEVEL ${save.bonus} • ∞ • TOTAL ×${fmt(coinMult()*10)/10}</div></div>
       </div></div>
+    <div class="sec"><div class="kick">MODE LIVE TIKTOK</div>
+      <div class="up"><div class="t"><h4>📡 Gift → Daya Angkat & Kecepatan</h4><button class="btn y" id="gLive">Atur Gift</button></div>
+      <p>5 preset naik & 5 preset turun sesuai jumlah koin gift. Status: <b style="color:${wsState==='on'?'var(--green)':'#fff'}">${WS_TXT[wsState]}</b></p></div></div>
     <div class="sec"><div class="kick">DATA FISIKA PESAWAT</div><div class="statsgrid">
       <div class="sg"><span>MASSA</span><b>${s.mass.toFixed(2)} kg</b></div>
       <div class="sg"><span>LUAS SAYAP</span><b>${s.S.toFixed(2)} m²</b></div>
@@ -978,6 +1012,7 @@ function renderGarage(){
     <button class="reset" id="gReset">Reset semua progress</button>`;
 }
 $('garage').addEventListener('click',e=>{
+  if(e.target.id==='gLive'){ openLive(); return; }
   if(e.target.id==='gReset'){ if(confirm('Hapus semua progress (koin, level, upgrade)?')){ save={...DEF,best:[...DEF.best],mute:save.mute}; persist(); rebuildModels(); resetWorld(); renderGarage(); } return; }
   const b=e.target.closest('[data-k]'); if(!b||b.disabled) return;
   const k=b.dataset.k, p=PRICE[k](save[k]), cap={wing:10,sling:10,prop:10,rocket:10,bonus:Infinity}[k];
@@ -1014,6 +1049,7 @@ const KEYMAP={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'lef
 let kbuf='';
 const kh=s=>[...s].reduce((a,c)=>(Math.imul(a,131)+c.charCodeAt(0)+7)>>>0,2166136261);
 addEventListener('keydown',e=>{
+  if(e.target && e.target.closest && e.target.closest('input,select,textarea')) return;
   const k=KEYMAP[e.code]; if(k){ keys[k]=true; if(state==='flight'||k==='rocket') e.preventDefault(); }
   if(e.code==='Enter' && state==='result' && $('rAgain')) enterAim();
   if(state==='garage' && e.key && e.key.length===1){
@@ -1029,6 +1065,143 @@ for(const [id,k] of [['bUp','up'],['bDown','down'],['bLeft','left'],['bRight','r
   const off=()=>{ btn[k]=false; el.classList.remove('on'); };
   el.addEventListener('pointerup',off); el.addEventListener('pointercancel',off); el.addEventListener('lostpointercapture',off);
 }
+
+/* ================= LIVE TIKTOK: gift → daya angkat & kecepatan ================= */
+const LIVE_KEY='planeLaunch3d.live';
+const LIVE_DEF={ ws:'', match:'floor',
+  up:[ {n:'Rose',c:1,l:5,s:5,d:6}, {n:'Rosa',c:10,l:12,s:10,d:8}, {n:'Paper Crane',c:99,l:25,s:20,d:10}, {n:'Corgi',c:299,l:50,s:35,d:12}, {n:'Galaxy',c:1000,l:100,s:60,d:15} ],
+  down:[ {n:'Finger Heart',c:5,l:5,s:5,d:6}, {n:'Doughnut',c:30,l:12,s:10,d:8}, {n:'Hand Hearts',c:100,l:25,s:20,d:10}, {n:'Money Gun',c:500,l:40,s:35,d:12}, {n:'Lion',c:29999,l:60,s:50,d:15} ] };
+const cloneLive=c=>JSON.parse(JSON.stringify(c));
+function sanePreset(p,d,down){ p=p&&typeof p==='object'?p:{}; const num=(v,a,b,df)=>{ v=+v; return isFinite(v)?clamp(v,a,b):df; };
+  return {n:String(p.n??d.n).slice(0,24), c:Math.round(num(p.c,0,1e7,d.c)), l:num(p.l,0,300,d.l), s:num(p.s,0,down?90:300,d.s), d:num(p.d,1,120,d.d)}; }
+function saneLive(c){ c=c&&typeof c==='object'?c:{}; return { ws:typeof c.ws==='string'?c.ws.slice(0,400):'', match:c.match==='exact'?'exact':'floor',
+  up:LIVE_DEF.up.map((d,i)=>sanePreset(Array.isArray(c.up)?c.up[i]:null,d,false)), down:LIVE_DEF.down.map((d,i)=>sanePreset(Array.isArray(c.down)?c.down[i]:null,d,true)) }; }
+let liveCfg=(()=>{ try{ const r=localStorage.getItem(LIVE_KEY); if(r) return saneLive(JSON.parse(r)); }catch(e){} return cloneLive(LIVE_DEF); })();
+try{ // link overlay: #live=<config base64>  atau  ?ws=<url>
+  const h=location.hash.match(/live=([^&]+)/); if(h) liveCfg=saneLive(JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(h[1]))))));
+  const w=new URLSearchParams(location.search).get('ws'); if(w) liveCfg.ws=w;
+}catch(e){}
+function persistLive(){ try{ localStorage.setItem(LIVE_KEY,JSON.stringify(liveCfg)); }catch(e){} }
+persistLive();
+
+let liveFx=[], liveQueue=[];
+function liveLiftMul(){ let s=0; for(const f of liveFx) s+=f.lift; return clamp(1+s,0.15,4); }
+function findPreset(coins){
+  const all=[...liveCfg.up.map((p,i)=>({...p,dir:1,i})), ...liveCfg.down.map((p,i)=>({...p,dir:-1,i}))].filter(p=>p.c>0);
+  const ex=all.find(p=>p.c===coins); if(ex||liveCfg.match==='exact') return ex||null;
+  let b=null; for(const p of all) if(p.c<=coins && (!b||p.c>b.c)) b=p; return b;
+}
+function startFx(fx,atLaunch){
+  liveFx.push({lift:fx.lift,until:flight.t+fx.dur});
+  const V=Math.hypot(P.vx,P.vy,P.vz); let m=clamp(fx.spd,0.3,3);
+  if(m>1 && V*m>150) m=Math.max(1,150/Math.max(V,1e-3));   // batas laju 150 m/s
+  P.vx*=m; P.vy*=m; P.vz*=m; if(atLaunch) flight.maxSpd=Math.max(flight.maxSpd,V*m);
+  emit(P.x,P.y,P.z,0,1,0,fx.lift>=0?0x4ade80:0xfb7185,0.8,26,4);
+}
+function feed(cls,main,sub){
+  const box=$('giftFeed'), el=document.createElement('div'); el.className='gf '+cls;
+  const b=document.createElement('div'); b.textContent=main; el.appendChild(b);
+  if(sub){ const s=document.createElement('small'); s.textContent=sub; el.appendChild(s); }
+  box.appendChild(el); while(box.children.length>5) box.firstChild.remove();
+  setTimeout(()=>{ el.style.opacity=0; setTimeout(()=>el.remove(),700); },5500);
+}
+function applyGift(g,n){
+  const p=findPreset(g.coins), who=(g.user?'@'+g.user:'Penonton')+' • '+(g.name||'Gift')+(n>1?' ×'+n:'')+` (${fmt(g.coins)} 🪙)`;
+  if(!p){ feed('', '🎁 '+who, 'Tidak ada preset untuk koin ini'); return; }
+  const k=Math.min(n,10), sg=p.dir>0?'+':'−';
+  const fx={lift:p.dir*p.l/100*k, spd:Math.pow(1+p.dir*p.s/100,k), dur:p.d};
+  const sub=`${p.dir>0?'▲ NAIK':'▼ TURUN'} ${p.i+1} (${p.n}): angkat ${sg}${fmt(p.l*k)}% • laju ${sg}${fmt(p.s)}%${k>1?'×'+k:''} • ${p.d} dtk`;
+  if(state==='flight'){ startFx(fx,false); feed(p.dir>0?'up':'dn','🎁 '+who,sub); }
+  else { liveQueue.push(fx); feed(p.dir>0?'up':'dn','🎁 '+who,sub+' — berlaku saat meluncur'); }
+  if(p.dir>0) tone(660,1320,0.18,'square',0.1); else tone(520,180,0.25,'sawtooth',0.1);
+}
+
+// Parser event gift — menerima banyak format (Streamover / TikFinity / TikTok-Live-Connector / JSON sendiri)
+const pick=(o,ks)=>{ for(const k of ks){ const v=k.split('.').reduce((a,q)=>a&&typeof a==='object'?a[q]:undefined,o); if(v!==undefined&&v!==null&&v!=='') return v; } };
+function parseGift(raw){
+  let m=raw; if(typeof m==='string'){ try{ m=JSON.parse(m); }catch(e){ return null; } }
+  if(!m||typeof m!=='object') return null;
+  const ev=String(pick(m,['event','type','eventType','action','name'])||'').toLowerCase();
+  let d=m; for(const k of ['data','payload','detail','msg']) if(m[k]&&typeof m[k]==='object'){ d=m[k]; break; }
+  if(ev && !ev.includes('gift') && !pick(d,['giftName','gift_name','giftId','gift_id','gift'])) return null;
+  const coins=+pick(d,['diamondCount','diamond_count','diamonds','coins','coin','giftValue','gift_value','value','price','gift.diamondCount','gift.diamond_count','gift.coins','gift.price','extendedGiftInfo.diamond_count']);
+  if(!(coins>0)) return null;
+  const count=Math.max(1,Math.floor(+pick(d,['repeatCount','repeat_count','count','amount','quantity','combo','gift.repeatCount'])||1));
+  const name=String(pick(d,['giftName','gift_name','gift.name','gift.giftName','giftname'])||(typeof d.gift==='string'?d.gift:'')||'Gift').slice(0,40);
+  const user=String(pick(d,['nickname','uniqueId','unique_id','username','userName','user.nickname','user.uniqueId','user.name','user'])||'').slice(0,40);
+  const re=pick(d,['repeatEnd','repeat_end']), gt=pick(d,['giftType','gift_type']);
+  return {coins,count,name,user,end:re===undefined?undefined:!!re,streak:gt===undefined?true:+gt===1,key:user+'|'+(pick(d,['giftId','gift_id'])??name)};
+}
+const streaks=new Map();
+function handleGiftMsg(raw){
+  const g=parseGift(raw); if(!g) return;
+  let n=g.count;
+  if(g.end!==undefined && g.streak){ const prev=streaks.get(g.key)||0; n=g.count>=prev?g.count-prev:g.count; if(g.end) streaks.delete(g.key); else streaks.set(g.key,g.count); }
+  if(n>0) applyGift(g,n);
+}
+
+// Sumber gift: WebSocket, postMessage (iframe/overlay), BroadcastChannel (tab lain)
+const WS_TXT={off:'Belum disambungkan',connecting:'Menyambung…',on:'Terhubung ✓',retry:'Terputus — mencoba lagi…',err:'URL tidak valid'};
+let ws=null, wsTimer=null, wsState='off';
+function setWs(s){ wsState=s; const el=$('lStat'); if(el){ el.textContent=WS_TXT[s]; el.className='lst'+(s==='on'?' on':s==='retry'||s==='err'?' bad':''); } }
+function liveConnect(){
+  clearTimeout(wsTimer); if(ws){ ws.onclose=null; try{ ws.close(); }catch(e){} ws=null; }
+  const url=liveCfg.ws.trim(); if(!url){ setWs('off'); return; }
+  try{ ws=new WebSocket(url); }catch(e){ setWs('err'); return; }
+  setWs('connecting');
+  ws.onopen=()=>setWs('on');
+  ws.onmessage=e=>handleGiftMsg(e.data);
+  ws.onclose=()=>{ ws=null; setWs('retry'); wsTimer=setTimeout(liveConnect,3000); };
+}
+addEventListener('message',e=>handleGiftMsg(e.data));
+try{ new BroadcastChannel('plane-launch-live').onmessage=e=>handleGiftMsg(e.data); }catch(e){}
+window.planeGift=(coins,count=1,name='Gift Tes',user='tes')=>applyGift({coins:+coins,count,name,user},Math.max(1,count|0));
+
+const escA=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function liveLink(){ return location.origin+location.pathname+'#live='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(liveCfg))))); }
+function renderLive(){
+  const hdr=`<div class="lrow lh"><span class="nm">NAMA / GIFT</span><span>KOIN</span><span>ANGKAT %</span><span>LAJU %</span><span class="dd">DETIK</span><span></span></div>`;
+  const row=(g,i,p)=>`<div class="lrow"><input class="nm" data-p="${g}|${i}|n" value="${escA(p.n)}" maxlength="24" aria-label="Nama preset">
+    <input type="number" min="1" data-p="${g}|${i}|c" value="${p.c}" aria-label="Koin"><input type="number" min="0" max="300" data-p="${g}|${i}|l" value="${p.l}" aria-label="Daya angkat %">
+    <input type="number" min="0" max="${g==='down'?90:300}" data-p="${g}|${i}|s" value="${p.s}" aria-label="Kecepatan %"><input class="dd" type="number" min="1" max="120" data-p="${g}|${i}|d" value="${p.d}" aria-label="Durasi detik">
+    <button class="btn" data-t="${g}|${i}">Tes</button></div>`;
+  $('live').innerHTML=`
+    <h3>📡 Mode Live TikTok</h3>
+    <p>Setiap gift dicocokkan dengan <b>jumlah koin</b> per gift. Preset <b style="color:var(--green)">NAIK</b> menambah daya angkat & kecepatan, preset <b style="color:var(--red)">TURUN</b> mengurangi. Gift beruntun (×N) menumpuk efeknya (maks ×10).</p>
+    <label>URL WEBSOCKET EVENT GIFT</label>
+    <div class="lline"><input id="lWs" placeholder="wss://… dari Streamover, atau ws://localhost:21213 (TikFinity)" value="${escA(liveCfg.ws)}"><button class="btn y" id="lConn">Sambungkan</button></div>
+    <span class="lst" id="lStat"></span>
+    <label>CARA MENCOCOKKAN KOIN</label>
+    <select id="lMatch"><option value="floor" ${liveCfg.match==='floor'?'selected':''}>Preset terdekat di bawah jumlah koin (disarankan)</option><option value="exact" ${liveCfg.match==='exact'?'selected':''}>Harus persis sama</option></select>
+    <div class="lgrp up"><h4>▲ 5 Preset NAIK — tambah daya angkat & kecepatan</h4>${hdr}${liveCfg.up.map((p,i)=>row('up',i,p)).join('')}</div>
+    <div class="lgrp dn"><h4>▼ 5 Preset TURUN — kurangi daya angkat & kecepatan</h4>${hdr}${liveCfg.down.map((p,i)=>row('down',i,p)).join('')}</div>
+    <p><b>Angkat %</b> = perubahan gaya angkat selama <b>Detik</b>. <b>Laju %</b> = dorongan/rem kecepatan seketika. Gift yang datang saat tidak terbang disimpan & berlaku saat peluncuran berikutnya.</p>
+    <div class="lacts"><button class="btn y" id="lClose">✓ Simpan & Tutup</button><button class="btn" id="lLink">🔗 Salin link overlay (OBS / Live Studio)</button><button class="btn" id="lDef">Kembalikan default</button></div>
+    <p id="lMsg"></p>`;
+  setWs(wsState);
+}
+function openLive(){ renderLive(); show('live',true); }
+function closeLive(){ persistLive(); show('live',false); if(state==='garage') renderGarage(); }
+$('live').addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='lWs'){ liveCfg.ws=t.value.slice(0,400); persistLive(); return; }
+  if(t.id==='lMatch'){ liveCfg.match=t.value==='exact'?'exact':'floor'; persistLive(); return; }
+  if(!t.dataset.p) return; const [g,i,f]=t.dataset.p.split('|'), list=liveCfg[g], v={...list[+i]};
+  v[f]=t.value; list[+i]=sanePreset(v,LIVE_DEF[g][+i],g==='down');
+  persistLive();
+});
+$('live').addEventListener('click',e=>{
+  const t=e.target;
+  if(t.id==='lConn'){ liveConnect(); return; }
+  if(t.id==='lClose'){ closeLive(); return; }
+  if(t.id==='lDef'){ if(confirm('Kembalikan semua preset ke default?')){ const w=liveCfg.ws; liveCfg=cloneLive(LIVE_DEF); liveCfg.ws=w; persistLive(); renderLive(); } return; }
+  if(t.id==='lLink'){ const u=liveLink(), m=$('lMsg');
+    const ok=()=>{ m.textContent='✓ Link tersalin. Tempel di Browser Source OBS / TikTok Live Studio — preset & URL ikut terbawa.'; };
+    if(navigator.clipboard) navigator.clipboard.writeText(u).then(ok,()=>{ m.textContent=u; }); else m.textContent=u; return; }
+  if(t.dataset.t){ const [g,i]=t.dataset.t.split('|'), p=liveCfg[g][+i]; applyGift({coins:p.c,count:1,name:p.n,user:'tes'},1); }
+});
+$('btnLive').onclick=openLive;
+if(liveCfg.ws) liveConnect();
 
 /* ================= HUD ================= */
 function updateAimInfo(){
@@ -1060,6 +1233,11 @@ function updateHud(){
   $('barRkt').style.display=st.rBurn>0?'block':'none';
   $('uEng').style.width=(st.fuel>0?clamp((state==='flight'?P.fuel:st.fuel)/st.fuel,0,1)*100:0)+'%';
   $('uRkt').style.width=(st.rBurn>0?clamp((state==='flight'?P.rfuel:st.rBurn)/st.rBurn,0,1)*100:0)+'%';
+  const hg=$('hGift');
+  if(state==='flight' && liveFx.length){ const m=liveLiftMul(); hg.style.display='inline-block'; hg.textContent=`🎁 Daya angkat ×${m.toFixed(2)}`; hg.style.borderColor=m>=1?'var(--green)':'var(--red)'; hg.style.color=m>=1?'var(--green)':'var(--red)'; }
+  else if(liveQueue.length){ hg.style.display='inline-block'; hg.textContent=`🎁 ${liveQueue.length} efek gift menunggu peluncuran`; hg.style.borderColor='var(--yellow)'; hg.style.color='var(--yellow)'; }
+  else hg.style.display='none';
+  $('hLive').style.display=wsState==='on'?'inline-block':'none';
   $('hStall').style.display = state==='flight' && !P.onGround && !P.crashed && Math.abs(P.alpha)>st.aStall ? 'inline-block':'none';
 }
 
@@ -1098,6 +1276,7 @@ function frame(){
     const rocketOn=keys.rocket||btn.rocket;
     acc+=dt*timeScale; let impact=0;
     while(acc>=H){
+      if(liveFx.length){ liveFx=liveFx.filter(f=>f.until>flight.t); P.lm=liveLiftMul(); } else P.lm=1;
       stepPhys(P,st,H,inputU,inputLR,rocketOn,flight.t); flight.t+=H; acc-=H;
       impact=Math.max(impact,P.impact); checkHits();
       if(!flight.won && P.x>=curLevel().target){ flight.won=true; tone(784,1568,0.4,'square',0.15); emit(P.x,P.y,P.z,0,3,0,0x4ade80,1.2,60,8); hint('🏁 FINISH! Level selesai — terus terbang buat koin tambahan!',3500); }
