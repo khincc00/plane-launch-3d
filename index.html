@@ -2,7 +2,10 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#060b18">
 <title>Plane Launch 3D</title>
 <meta name="description" content="Game ketapel pesawat 3D berbasis web dengan fisika terbang realistis. Tanpa iklan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +16,10 @@
   --text:#f2f7ff; --muted:#a7b8d4; --sky:#38bdf8; --yellow:#facc15; --green:#4ade80; --red:#fb7185;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;overscroll-behavior:none;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,select,textarea{-webkit-user-select:text;user-select:text}
+button{touch-action:manipulation}
 canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 canvas#c:active{cursor:grabbing}
 .mono{font-family:'JetBrains Mono',monospace}
@@ -142,19 +148,80 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .gf b{color:#fff} .gf.up{border-color:rgba(74,222,128,.7)} .gf.dn{border-color:rgba(251,113,133,.7)}
 .gf small{display:block;color:var(--muted);font-size:11.5px}
 @keyframes gfin{from{opacity:0;transform:translateX(-24px)}}
-@media (max-width:560px){ .lrow{grid-template-columns:1fr 1fr 1fr 1fr 46px} .lrow .nm{grid-column:1/-1} .lrow.lh .nm,.lrow.lh .dd{display:none} .lrow .dd{display:none} }
+#live input[type=number]{-moz-appearance:textfield;appearance:textfield}
+#live input[type=number]::-webkit-inner-spin-button,#live input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+@media (max-width:560px){ .lrow{grid-template-columns:1.35fr 1fr 1fr 1fr 48px;gap:5px} .lrow .nm{grid-column:1/-1;margin-top:6px} .lrow.lh .nm{display:none} .lrow input{padding:8px 6px} .lrow.lh{font-size:8.5px;letter-spacing:.04em} }
 
 #loading{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);z-index:50;font-family:'Sora';font-size:15px;color:var(--muted)}
 
+/* ---- layar sentuh / smartphone ---- */
+#hud{padding-top:max(12px,env(safe-area-inset-top));padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+#topBtns{top:max(12px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right))}
+#padL{left:max(16px,env(safe-area-inset-left))} #padR{right:max(16px,env(safe-area-inset-right))}
+.pad{bottom:max(24px,calc(env(safe-area-inset-bottom) + 12px))}
+.pad button{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#garage{padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+.go{bottom:max(18px,calc(env(safe-area-inset-bottom) + 10px))}
+#topBtns .lbl{display:inline}
 @media (max-width:760px){
-  #garage{top:auto;height:66vh;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:24px 24px 0 0}
+  #topBtns{left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));max-width:none;gap:6px}
+  #topBtns .round{padding:7px 10px;font-size:12px}
+  #topBtns .lbl{display:none}
+  #hud{padding-top:calc(max(12px,env(safe-area-inset-top)) + 42px);padding-left:12px;padding-right:12px}
+  .hud-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .stat{border-radius:12px}
+  .stat span{font-size:9px;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stat b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prog{max-width:none}
+  .hud-sub .chip{font-size:11px;padding:3px 8px}
+  .bars{max-width:180px}
+  #garage{top:auto;height:64vh;height:64dvh;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:24px 24px 0 0;padding:18px 14px calc(110px + env(safe-area-inset-bottom))}
   .go{right:16px;width:calc(100% - 32px)}
-  .stat{min-width:0;padding:6px 10px}
-  .stat b{font-size:15px}.stat.big b{font-size:19px}
-  #hint{bottom:104px;font-size:12px}
-  #aimInfo{bottom:150px}
-  .pad button{width:58px;height:58px}
-  #bRocket{width:68px;height:68px}
+  .stat{min-width:0;padding:6px 8px}
+  .stat b{font-size:15px}.stat.big b{font-size:17px}
+  #hint{bottom:calc(176px + env(safe-area-inset-bottom));font-size:12px}
+  #aimInfo{bottom:calc(246px + env(safe-area-inset-bottom));gap:6px}
+  #aimInfo .stat b{font-size:14px}
+  .pad button{width:60px;height:60px}
+  #bRocket{width:70px;height:70px}
+  #live{padding:14px}
+  #live input,#live select{font-size:16px}
+  .wallet{padding:7px 10px;font-size:14px}
+  .logo b{font-size:15px}
+  #giftFeed{bottom:calc(236px + env(safe-area-inset-bottom));left:12px;max-width:calc(100% - 24px)}
+  .gf{font-size:12px}
+  .gf:nth-last-child(n+4){display:none}
+}
+@media (max-height:500px) and (orientation:landscape){
+  #hud{padding-top:max(8px,env(safe-area-inset-top))}
+  .hud-row{display:flex}
+  .stat{padding:4px 9px;min-width:0}
+  .stat span{font-size:8.5px}
+  .stat b{font-size:14px}.stat.big b{font-size:17px}
+  .prog{margin-top:5px;padding:4px 8px;max-width:340px}
+  .hud-sub{margin-top:5px}.hud-sub .chip{font-size:10.5px;padding:2px 8px}
+  .bars{margin-top:5px;gap:3px;max-width:160px}
+  #topBtns{top:max(8px,env(safe-area-inset-top));left:auto;max-width:45vw}
+  #topBtns .round{padding:6px 9px;font-size:12px}
+  #topBtns .lbl{display:none}
+  .pad{bottom:max(12px,env(safe-area-inset-bottom))}
+  .pad .col{gap:8px}
+  .pad button{width:52px;height:52px;font-size:19px;border-radius:16px}
+  #bRocket{width:62px;height:62px;font-size:24px}
+  #hint{bottom:12px;max-width:calc(100% - 300px);font-size:11.5px;padding:7px 12px}
+  #aimInfo{bottom:60px}
+  #aimInfo .stat b{font-size:14px}
+  #giftFeed{bottom:80px;left:max(12px,env(safe-area-inset-left));max-width:min(330px,calc(100% - 220px))}
+  .gf{font-size:11.5px;padding:5px 9px}
+  .gf:nth-last-child(n+3){display:none}
+  .gf:nth-last-child(n+2) small{display:none}
+  #garage{top:0;bottom:0;height:auto;width:min(420px,58%);border-radius:0;border-top:0;border-left:1px solid var(--line);padding:14px 14px 90px}
+  .go{right:12px;width:min(390px,calc(58% - 24px));padding:12px;font-size:15px}
+  #result{padding:14px;max-height:calc(100% - 16px)}
+  #result .dist{font-size:32px}
+  #result .rows{margin:8px 0}
+  #live{max-height:calc(100% - 12px)}
+  #live input,#live select{font-size:16px}
 }
 </style>
 </head>
@@ -182,8 +249,8 @@ button:disabled{opacity:.45;cursor:not-allowed}
   <button class="round" id="bFast" style="display:none">⏩ 1×</button>
   <button class="round" id="bSkip" style="display:none">⏭ Selesai</button>
   <button class="round" id="btnMute">🔊</button>
-  <button class="round" id="btnLive">📡 Live</button>
-  <button class="round" id="btnGarage">🔧 Garasi</button>
+  <button class="round" id="btnLive" aria-label="Mode Live">📡<span class="lbl"> Live</span></button>
+  <button class="round" id="btnGarage" aria-label="Garasi">🔧<span class="lbl"> Garasi</span></button>
 </div>
 <div id="giftFeed"></div>
 
@@ -301,7 +368,9 @@ const ldMax = s => 0.5*Math.sqrt(Math.PI*s.e*s.AR/s.cd0);
 /* ================= RENDERER & SCENE ================= */
 const canvas=$('c');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const TOUCH=matchMedia('(pointer:coarse)').matches;
+let dpr=Math.min(devicePixelRatio||1,TOUCH?1.75:2);
+renderer.setPixelRatio(dpr);
 renderer.setSize(innerWidth,innerHeight);
 renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
@@ -326,7 +395,19 @@ Object.assign(sun.shadow.camera,{left:-22,right:22,top:22,bottom:-22,near:1,far:
 sun.shadow.bias=-0.0005;
 scene.add(sun); scene.add(sun.target);
 function placeSun(x,y,z){ sun.position.set(x+40,y+80,z+45); sun.target.position.set(x,y,z); }
-addEventListener('resize',()=>{ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); if(typeof setView==='function') setView(); });
+function onResize(){ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); if(typeof setView==='function') setView(); }
+addEventListener('resize',onResize);
+addEventListener('orientationchange',()=>{ setTimeout(onResize,150); setTimeout(onResize,600); });
+// Kualitas adaptif: kalau HP berat (< ~25 fps), turunkan resolusi lalu matikan bayangan
+let perfT=0, perfN=0, perfLast=performance.now();
+function adaptQuality(){
+  const n=performance.now(), d=n-perfLast; perfLast=n; if(d>250||document.hidden) return;
+  perfT+=d; perfN++; if(perfT<2500) return;
+  const avg=perfT/perfN; perfT=0; perfN=0;
+  if(avg>40 && dpr>1){ dpr=Math.max(1,dpr-0.25); renderer.setPixelRatio(dpr); renderer.setSize(innerWidth,innerHeight); }
+  else if(avg>45 && renderer.shadowMap.enabled){ renderer.shadowMap.enabled=false;
+    scene.traverse(o=>{ const m=o.material; if(m) (Array.isArray(m)?m:[m]).forEach(x=>x.needsUpdate=true); }); }
+}
 
 /* ================= MATERIAL & GEOMETRI ================= */
 const std = (c,o={}) => new THREE.MeshStandardMaterial({color:c,roughness:0.75,metalness:0.05,flatShading:true,...o});
@@ -856,7 +937,8 @@ function setAng(a){ aim.ang=a; aim.dx=Math.cos(a); aim.dy=Math.sin(a); }
 function newWind(){ const W=curLevel().wind; wind.base=Math.round(rand(-W,W)*10)/10; wind.cross=Math.round(rand(-W,W)*0.5*10)/10; wind.gust=rand(0.4,W*0.5); wind.ph=rand(0,6); }
 
 function show(id,on){ $(id).style.display=on?'block':'none'; }
-function setPads(on){ $('padL').style.display=on?'flex':'none'; $('padR').style.display=on?'flex':'none'; }
+function releaseInputs(){ for(const k in keys) keys[k]=false; for(const k in btn) btn[k]=false; document.querySelectorAll('.pad button.on').forEach(b=>b.classList.remove('on')); }
+function setPads(on){ $('padL').style.display=on?'flex':'none'; $('padR').style.display=on?'flex':'none'; if(!on) releaseInputs(); }
 let hintT=null;
 function hint(html,ms=0){ const h=$('hint'); h.innerHTML=html; h.style.display='block'; h.style.opacity=1; clearTimeout(hintT); if(ms) hintT=setTimeout(()=>{h.style.opacity=0;},ms); }
 
@@ -883,7 +965,8 @@ function launch(){
   $('aimInfo').style.display='none'; $('btnGarage').style.display='none';
   setPads(true); $('bRocket').style.display=save.rocket>0?'block':'none';
   $('bFast').style.display='inline-block'; $('bSkip').style.display='none';
-  hint('◀ ▶ / A D: belok hindari rintangan • ▲ ▼ / W S: hidung'+(save.rocket>0?' • tahan 🚀 / SPASI: roket':''), 5000);
+  hint(TOUCH ? '◀ ▶ belok hindari rintangan • ▲ ▼ hidung'+(save.rocket>0?' • tahan 🚀 roket':'')
+             : '◀ ▶ / A D: belok hindari rintangan • ▲ ▼ / W S: hidung'+(save.rocket>0?' • tahan 🚀 / SPASI: roket':''), 5000);
   tone(160,50,0.35,'triangle',0.35); burst(0.5,1400,0.25*aim.frac+0.05);
   liveFx=[]; P.lm=1; for(const fx of liveQueue.splice(0)) startFx(fx,true);
 }
@@ -1029,21 +1112,28 @@ $('bFast').onclick=()=>{ timeScale=timeScale===1?2:timeScale===2?4:1; $('bFast')
 /* ================= INPUT ================= */
 canvas.addEventListener('pointerdown',e=>{
   const a=audio(); if(a&&a.state==='suspended') a.resume();
-  if(state!=='aim') return;
-  aim.active=true; aim.sx=e.clientX; aim.sy=e.clientY; try{ canvas.setPointerCapture(e.pointerId); }catch(_){}
+  if(state!=='aim' || aim.active) return;   // jari kedua diabaikan
+  aim.active=true; aim.pid=e.pointerId; aim.sx=e.clientX; aim.sy=e.clientY; try{ canvas.setPointerCapture(e.pointerId); }catch(_){}
 });
 canvas.addEventListener('pointermove',e=>{
-  if(state!=='aim'||!aim.active) return;
+  if(state!=='aim'||!aim.active||e.pointerId!==aim.pid) return;
   const dx=e.clientX-aim.sx, dy=e.clientY-aim.sy, len=Math.hypot(dx,dy);
   aim.frac=clamp(len/(0.32*Math.min(innerWidth,innerHeight)),0,1);
   if(len>6){ let ang=Math.atan2(dy,-dx); if(-dx<0) ang = dy>0?1.3:-0.1; setAng(clamp(ang,-0.1,1.3)); }
   restPose(); updateAimInfo(); updatePreview();
 });
-const pointerEnd=()=>{
-  if(state!=='aim'||!aim.active) return; aim.active=false;
-  if(aim.frac>0.08) launch(); else { aim.frac=0; restPose(); preview.visible=false; updateAimInfo(); }
+const pointerEnd=(e,cancel)=>{
+  if(state!=='aim'||!aim.active||e.pointerId!==aim.pid) return; aim.active=false;
+  if(aim.frac>0.08 && !cancel) launch(); else { aim.frac=0; restPose(); preview.visible=false; updateAimInfo(); }
 };
-canvas.addEventListener('pointerup',pointerEnd); canvas.addEventListener('pointercancel',pointerEnd);
+// pointercancel (mis. notifikasi / gestur sistem di HP) = batal, bukan meluncur
+canvas.addEventListener('pointerup',e=>pointerEnd(e,false)); canvas.addEventListener('pointercancel',e=>pointerEnd(e,true));
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+canvas.addEventListener('webglcontextlost',e=>e.preventDefault());
+document.addEventListener('gesturestart',e=>e.preventDefault());
+document.addEventListener('dblclick',e=>{ if(!e.target.closest('input,select,textarea')) e.preventDefault(); },{passive:false});
+document.addEventListener('touchmove',e=>{ if(!e.target.closest('#garage,#live,#result')) e.preventDefault(); },{passive:false});
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) releaseInputs(); });
 
 const KEYMAP={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',Space:'rocket'};
 let kbuf='';
@@ -1058,9 +1148,10 @@ addEventListener('keydown',e=>{
   }
 });
 addEventListener('keyup',e=>{ const k=KEYMAP[e.code]; if(k) keys[k]=false; });
-addEventListener('blur',()=>{ for(const k in keys) keys[k]=false; });
+addEventListener('blur',releaseInputs);
 for(const [id,k] of [['bUp','up'],['bDown','down'],['bLeft','left'],['bRight','right'],['bRocket','rocket']]){
   const el=$(id);
+  el.addEventListener('contextmenu',e=>e.preventDefault());
   el.addEventListener('pointerdown',e=>{ btn[k]=true; el.classList.add('on'); try{ el.setPointerCapture(e.pointerId); }catch(_){} e.preventDefault(); });
   const off=()=>{ btn[k]=false; el.classList.remove('on'); };
   el.addEventListener('pointerup',off); el.addEventListener('pointercancel',off); el.addEventListener('lostpointercapture',off);
@@ -1227,7 +1318,8 @@ function updateHud(){
   $('hLevel').textContent=`LEVEL ${LEVELS.indexOf(L)+1} • ${fmt(d)} / ${fmt(L.target)} m`;
   $('uProg').style.width=clamp(d/L.target,0,1)*100+'%';
   const w=wind.base, c=wind.cross;
-  $('hWind').textContent=(Math.abs(w)<0.3?'🍃 Tenang':(w>0?'🍃 Dorong → ':'🍃 Depan ← ')+Math.abs(w).toFixed(1))+(Math.abs(c)>=0.3?` • samping ${c>0?'▶':'◀'} ${Math.abs(c).toFixed(1)}`:'')+' m/s';
+  const wTxt=(Math.abs(w)<0.3?'🍃 Tenang':(w>0?'🍃 Dorong → ':'🍃 Depan ← ')+Math.abs(w).toFixed(1)+' m/s')+(Math.abs(c)>=0.3?` • samping ${c>0?'▶':'◀'} ${Math.abs(c).toFixed(1)} m/s`:'');
+  $('hWind').textContent=wTxt;
   $('hBiome').textContent=BIOMES[state==='flight'||state==='aim'?biomeAt(d):0].name;
   $('barEng').style.display=st.fuel>0?'block':'none';
   $('barRkt').style.display=st.rBurn>0?'block':'none';
@@ -1264,7 +1356,7 @@ function checkHits(){
   }
 }
 function frame(){
-  requestAnimationFrame(frame);
+  requestAnimationFrame(frame); adaptQuality();
   const dt=Math.min(clock.getDelta(),0.05), sz=st.size, now=performance.now()/1000;
 
   for(const o of obstacles){ if(o.bird && !o.hit){ o.z=o.z0+o.amp*Math.sin(now*0.8+o.ph); o.m.position.set(o.x,o.y+Math.sin(now*3+o.ph)*0.4,o.z); o.m.rotation.y=Math.cos(now*0.8+o.ph)>0?-Math.PI/2:Math.PI/2; o.wg.scale.z=0.6+0.4*Math.abs(Math.sin(now*12+o.ph)); } }
