@@ -4,9 +4,10 @@ Game web 3D: luncurkan pesawat pakai ketapel, upgrade bagiannya, dan terbang sej
 
 **Main:** https://khincc00.github.io/plane-launch-3d/
 
-- 7 level, setiap level memakai satu pesawat (Kertas → Jet)
-- Fisika terbang realistis (lift, drag, stall, angin, thermal)
-- Upgrade sayap, mesin/baling-baling, ketapel, roket, dan bonus koin. Setiap upgrade mengubah bentuk pesawat.
+- 7 level, setiap level memakai satu pesawat dari aset 3D: Kertas (origami) → Kardus (low poly) → Mainan Kayu (biplan) → Mainan RC → Biplan Ultralight (WW1) → Jet Bisnis → Jet Penumpang (A320). Jarak tiap level 1.000 m sampai 8.000 m.
+- Peta dibangun dari potongan aset yang dibongkar lalu digabung per tile: hutan pinus (bioma rumput) dan blok kota (bioma kota). Canyon dan laut tetap prosedural.
+- Fisika dengan data pesawat nyata, diskalakan ke ukuran model: berat, lift ½ρv²S·CL, drag CD0 + CL²/πeAR, stall, dorong, angin profil ketinggian + hembusan, thermal, dan kerapatan udara turun dengan ketinggian. Tanpa autopilot: pitch diatur pemain.
+- Pesawat dibongkar jadi bagian (badan, sayap, ekor, sirip, mesin, roda, baling-baling). Level 1 hanya bodi; upgrade memasang bagian satu per satu. Upgrade sayap, mesin, ketapel, roket, dan bonus koin.
 - Kontrol: tarik ketapel dengan mouse/jari. ← → untuk belok, ↑ ↓ untuk pitch, Spasi untuk roket.
 
 ## Mode Live TikTok
@@ -21,4 +22,4 @@ Sumber event gift yang diterima:
 
 **🔗 Salin link overlay** membuat link berisi semua preset dan URL. Tempel link itu di Browser Source OBS atau TikTok Live Studio.
 
-Cukup satu file `index.html` (Three.js dari CDN).
+Isi proyek: `index.html` + folder `assets/` (`assets/planes/p1–p7.glb`, `assets/map/kota.glb`, `assets/map/hutan.glb`). Three.js dimuat dari CDN. Karena aset dimuat lewat fetch, jalankan lewat server statis (mis. GitHub Pages), bukan dibuka langsung dari file.
